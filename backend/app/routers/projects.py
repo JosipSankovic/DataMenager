@@ -22,7 +22,7 @@ def read_projects(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)
     return projects
 
 @router.get("/{project_id}",response_model = ProjectBase)
-def get_project(project_id:int,db:Session=Depends(get_db))->ProjectBase:
+def get_project(project_id:str,db:Session=Depends(get_db))->ProjectBase:
     project = project_service.get_project(project_id,db)
     if project is None:
         raise HTTPException(status_code=404, detail="Project not found")
@@ -30,7 +30,7 @@ def get_project(project_id:int,db:Session=Depends(get_db))->ProjectBase:
 
 
 @router.delete("/{project_id}", response_model=ProjectBase)
-def delete_project(project_id: int, db: Session = Depends(get_db)):
+def delete_project(project_id: str, db: Session = Depends(get_db)):
     project = project_service.get_project(project_id,db)
     if project is None:
         raise HTTPException(status_code=404, detail="Project not found")

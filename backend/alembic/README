@@ -1,0 +1,4 @@
+Generic single-database configuration.
+
+alembic revision --autogenerate -m "added file size"
+alembic upgrade head

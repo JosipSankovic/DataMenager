@@ -7,7 +7,7 @@ class ProjectCreate(BaseModel):
     description: str
 
 class ProjectBase(BaseModel):
-    id :int
+    id :str
     name : str
     description : str
     absolute_path : str

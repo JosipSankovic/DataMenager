@@ -1,11 +1,11 @@
-from app.routers import projects
+from app.routers import ProjectsRouter, ImagesRouter
 from app.core import engine
 from app.models import projects as item_model # Import models so they are registered
+from app.models import images as images_model
 from fastapi import FastAPI
-
 # Create the database tables
 item_model.Base.metadata.create_all(bind=engine)
-
+images_model.Base.metadata.create_all(bind=engine)
 app = FastAPI(
     title="DataMenager API",
     version="0.1.0",
@@ -17,4 +17,5 @@ app = FastAPI(
 def read_root():
     return {"Hello": "World"}
 
-app.include_router(projects.router)
+app.include_router(ProjectsRouter)
+app.include_router(ImagesRouter)

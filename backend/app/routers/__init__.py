@@ -1,3 +1,3 @@
 from app.routers.projects import router as ProjectsRouter
-
-__all__ = ["ProjectsRouter"]
+from app.routers.images import router as ImagesRouter
+__all__ = ["ProjectsRouter","ImagesRouter"]
