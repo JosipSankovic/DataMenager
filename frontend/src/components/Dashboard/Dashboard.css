@@ -1,0 +1,27 @@
+.main-title{
+    padding: 20px;
+    color:var(--text-white);
+    border-bottom: 1px solid var(--border-color);
+}
+.main-title>.search-bar>input{
+    padding: 10px 30px;
+    border-radius: 10px;
+    border:0px;
+    background-color: var(--bg-card);
+    color:var(--text-white);
+}
+.main-title>.search-bar{
+    position: relative;
+}
+.main-title>.search-bar>span{
+    position: absolute;
+    left: 3px;
+    top: 50%;
+    translate:0 -50%;
+    color:var(--text-white)
+}
+
+.image-grid>.image-card>.overlay>p{
+    overflow-wrap: anywhere;
+    margin:10px 20px;
+}

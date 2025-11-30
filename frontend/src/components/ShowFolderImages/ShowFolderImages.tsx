@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import "./ShowFolderImages.css"
 import { ImagesService, OpenAPI } from '../../api';
+import { ProjectContext } from '../../utils';
 
 
 
@@ -9,6 +10,7 @@ const DataIngestion = () => {
   const [images,setImages] = useState<Array<string>>([])
   const [page,setPage] = useState(1)
   const [scannedPath,setScannedPath]= useState("")
+  const projectContext = useContext(ProjectContext)
 
   const fetchImages=async ()=>{
     try{
@@ -28,7 +30,8 @@ const DataIngestion = () => {
   }
 
   const addImagesToProject=async()=>{
-    const response = await ImagesService.addImgToProjectImagesAddImgsToProjectPost(scannedPath,"222df673-d59f-4093-acf8-4dc12af01bc0",images)
+    if(!projectContext?.project) return
+    const response = await ImagesService.addImgToProjectImagesAddImgsToProjectPost(scannedPath,projectContext.project.id,images)
   }
   return (
     <main className="main-container">
@@ -77,7 +80,7 @@ const DataIngestion = () => {
                 title="Exclude image"
                 onClick={() => removeImage(img)}
               >
-                <span className="material-symbols-outlined">X</span>
+                <span className="material-symbols-outlined">close</span>
               </button>
             </div>
           </div>

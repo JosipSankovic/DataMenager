@@ -9,7 +9,6 @@ import numpy as np
 import shutil
 import uuid
 from datetime import datetime,timezone
-PAGE_SIZE = 1150
 
 
 class ImagesService:
@@ -90,7 +89,7 @@ class ImagesService:
         return img_objects
 
         
-    def get_folder_images(self, folder_path: str, page: int, db: Session) -> list[str]:
+    def get_folder_images(self, folder_path: str, page: int, db: Session,page_size = 150) -> list[str]:
         if page <= 0:
             page = 1
         if not os.path.exists(folder_path):
@@ -102,6 +101,6 @@ class ImagesService:
                 continue
             idx += 1
 
-            if idx >= (page - 1) * PAGE_SIZE and idx < page * PAGE_SIZE:
+            if idx >= (page - 1) * page_size and idx < page * page_size:
                 folder_images.append(image)
         return folder_images

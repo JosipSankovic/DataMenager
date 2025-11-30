@@ -13,6 +13,12 @@
   padding: 0px;
   margin: 0px;
 }
+#root{
+  display: flex;
+  flex-direction: row;
+  min-height: 100vh;
+}
 p,span{
   color:var(--text-white);
+  font-family:Inter,sans-serif;
 }
