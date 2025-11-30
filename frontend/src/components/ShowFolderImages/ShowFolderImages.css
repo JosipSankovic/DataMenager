@@ -1,0 +1,119 @@
+.main-container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.page-heading{
+    border-bottom: 1px solid var(--border-color);
+    padding: 30px 20px;
+}
+
+.action-bar{
+    border-bottom: 1px solid var(--border-color);
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: row;
+    gap:5px;
+}
+.input-label{
+    display: flex;
+    flex-direction: column;
+    flex:1;
+}
+.input-label>input{
+    padding: 10px;
+    margin-top: 5px;
+    background-color: var(--bg-card);
+    color:white;
+    font-size: 18px;
+}
+
+.action-bar>button{
+    margin-top: 10px;
+    background-color: var(--primary-color);
+    border:0px;
+    border-radius: 10px;
+}
+.action-bar>button:hover{
+    cursor:pointer;
+}
+.meta-data{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+    gap:10px;
+}
+.meta-data>button{
+    margin-top: 10px;
+    background-color: var(--primary-color);
+    border:0px;
+    border-radius: 10px;
+    padding: 10px 20px;
+    color: white;
+}
+.meta-data>button:hover{
+    cursor: pointer;
+}
+.image-grid{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 30px 10px;
+}
+.image-grid>.image-card{
+    position: relative;
+    margin:10px 10px;
+}
+.image-grid>.image-card>.overlay{
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: start;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+
+}
+.image-card:hover .overlay {
+  opacity: 1;
+}
+
+.image-card:hover .overlay:hover{
+    cursor: pointer;
+}
+.image-grid>.image-card>img{
+    max-width: 450px;
+}
+
+.btn-secondary {
+  background-color: var(--primary-color);
+  color: var(--text-white);
+  height: 2.5rem;
+  padding: 0 1rem;
+  font-size: 0.875rem;
+  box-shadow: 0 0 15px rgba(37, 106, 244, 0.7);
+    border:0px;
+    margin: 10px;
+}
+
+
+.btn-close {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background-color: rgba(220, 38, 38, 0.8);
+  color: white;
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0px;
+}
+

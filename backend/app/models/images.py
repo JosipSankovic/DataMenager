@@ -6,7 +6,7 @@ import uuid
 class Images(Base):
     __tablename__="images"
     id = Column(UUID(as_uuid=False), primary_key=True, default=uuid.uuid4)
-    project_id =  Column(UUID(as_uuid=False),ForeignKey("project.id"),nullable=False)
+    project_id =  Column(UUID(as_uuid=True),ForeignKey("project.id"),nullable=False)
     rel_path = Column(String, index=True)
 
     width = Column(Integer, nullable=False)

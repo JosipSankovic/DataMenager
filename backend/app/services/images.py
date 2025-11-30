@@ -1,10 +1,15 @@
 from app.models import Images
 from sqlalchemy.orm import Session
+from sqlalchemy import insert
 from app.schemas import ImageBase, ImageCreate
 import os
 from fastapi import HTTPException
-
-PAGE_SIZE = 5
+import cv2
+import numpy as np
+import shutil
+import uuid
+from datetime import datetime,timezone
+PAGE_SIZE = 1150
 
 
 class ImagesService:
@@ -35,6 +40,56 @@ class ImagesService:
         db.commit()
         return db_image
 
+    def create_image_batch(self,imgs_dir:str,images:list[str],project_id:str,db:Session)->list[ImageBase]:
+        from app.services import ProjectService
+        from app.schemas import ProjectBase
+        project_service =ProjectService()
+        project:ProjectBase|None = project_service.get_project(project_id,db)
+        if project is None:
+            raise HTTPException(status_code=404, detail="Cant find project")
+        project_path = project.absolute_path
+        img_objects: list[ImageCreate] = []
+
+        for img_name in images:
+            from_img_path=os.path.join(imgs_dir,img_name)
+            to_img_path=os.path.join(project_path,img_name)
+
+            if not os.path.exists(from_img_path):
+                continue
+            stream = np.fromfile(from_img_path, dtype=np.uint8)
+            img = cv2.imdecode(stream, cv2.IMREAD_COLOR)
+            if img is None:
+                continue
+            height,width,channels = img.shape
+            extension = img_name.split(".")[-1].lower()
+            shutil.move(from_img_path,to_img_path)
+            if not os.path.exists(to_img_path):
+                continue
+            print(img_name)
+            project_id_uuid = None
+            if isinstance(project_id, str):
+                project_id_uuid = uuid.UUID(project_id)
+            else:
+                project_id_uuid = project_id
+            new_id = uuid.uuid4()
+            now = datetime.now(timezone.utc)
+            img_objects.append({
+            "id": uuid.uuid4(),  # Generiramo UUID objekt
+            "project_id": project_id_uuid,
+            "rel_path": img_name,
+            "width": width,
+            "height": height,
+            "channels": channels,
+            "mime_type": f"image/{extension}",
+            "is_annotated": False,
+            "created_at": now})
+        
+        stmt = insert(Images).values(img_objects)
+        db.execute(stmt)
+        db.commit()
+        return img_objects
+
+        
     def get_folder_images(self, folder_path: str, page: int, db: Session) -> list[str]:
         if page <= 0:
             page = 1

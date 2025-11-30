@@ -1,0 +1,18 @@
+:root {
+  --bg-dark: #0f1623; /* Pretpostavljena pozadina stranice */
+  --bg-card: #182234;
+  --border-color: #314368;
+  --text-white: #ffffff;
+  --text-muted: #90a4cb;
+  --primary-color: #256af4; /* Približna 'primary' boja */
+  --primary-hover: #1a55d4;
+  --danger-color: #dc2626;
+}
+#root,body{
+  background-color: var(--bg-dark);
+  padding: 0px;
+  margin: 0px;
+}
+p,span{
+  color:var(--text-white);
+}

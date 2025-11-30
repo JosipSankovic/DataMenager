@@ -1,9 +1,10 @@
 from pydantic import BaseModel
 from datetime import datetime
+from uuid import UUID
 
 class ImageBase(BaseModel):
-    id:str
-    project_id:str
+    id:UUID
+    project_id:UUID
     rel_path:str
     width:int
     height:int
@@ -13,10 +14,13 @@ class ImageBase(BaseModel):
     created_at:datetime
 
 class ImageCreate(BaseModel):
-    project_id:str
+    project_id:UUID
     rel_path:str
     width:int
     height:int
     channels:int
     mime_type:str
     is_annotated:bool
+    created_at:datetime
+    class Config:
+        from_attributes = True
