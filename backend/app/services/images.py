@@ -51,7 +51,7 @@ class ImagesService:
         return db_image
 
     def create_image_batch(self,imgs_dir:str,images:list[str],project_id:str,db:Session)->list[ImageBase]:
-        from app.services import ProjectService
+        from app.services import ProjectService,LabelsService
         from app.schemas import ProjectBase
         if len(images)==0:
             return []
@@ -65,9 +65,14 @@ class ImagesService:
         for img_name in images:
             from_img_path=os.path.join(imgs_dir,img_name)
             to_img_path=os.path.join(project_path,img_name)
+            from_json_file = os.path.join(imgs_dir,f"{os.path.splitext(img_name)[0]}.json")
+            to_json_file = os.path.join(project_path,f"{os.path.splitext(img_name)[0]}.json")
 
+            
             if not os.path.exists(from_img_path):
                 continue
+            if os.path.exists(from_json_file):
+                shutil.move(from_json_file,to_json_file)
             stream = np.fromfile(from_img_path, dtype=np.uint8)
             img = cv2.imdecode(stream, cv2.IMREAD_COLOR)
             if img is None:
@@ -98,6 +103,10 @@ class ImagesService:
         stmt = insert(Images).values(img_objects)
         db.execute(stmt)
         db.commit()
+        label_service = LabelsService()
+
+        label_service.add_labels_batch_from_images(project_path,img_objects,db)
+
         return img_objects
 
     def get_folder_images(self, folder_path: str, page: int, db: Session,page_size = 150) -> list[str]:
