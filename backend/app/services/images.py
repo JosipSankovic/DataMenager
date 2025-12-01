@@ -189,8 +189,6 @@ class ImagesService:
         created_images = self.create_image_batch(
             project_path, new_images, project_id, db
         )
-        print("add labels for created images")
-        label_service.add_labels_batch_from_images(project_path, created_images, db)
         print("done")
 
         return None
