@@ -152,21 +152,16 @@ class ImagesService:
     def scan_folder(
         self, project_path: str, project_id: str, db: Session
     ) -> list[ImageBase]:
-        from app.services import LabelsService, VersionService
+        from app.services import LabelsService
 
         label_service = LabelsService()
-        version_service = VersionService()
         # get latest version of dataset
-        all_versions = version_service.get_versions(project_id, db)
-        if len(all_versions)!=0:
-            latest_version = all_versions[-1]
-            # get all labels with latest versions of labels
-            db_labels = label_service.get_version_labels(
-                latest_version.id, project_id, db, True
-            )
-        else:
-            db_labels = label_service.get_unversion_labels( project_id, db
-            )
+
+           
+        db_labels = label_service.get_latest_labels(
+            project_id, db
+        )
+
 
 
         if not os.path.exists(project_path):

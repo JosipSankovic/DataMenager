@@ -23,7 +23,10 @@ export default function Dashboard() {
       }
     };
   useEffect(() => {
-    fetchImages();
+    if(projectContext?.project)
+     fetchImages();
+    else
+      setImagesInfo([])
   }, [projectContext?.project]);
 
   const getImgUrl = (url: string): string => {
@@ -82,7 +85,7 @@ export default function Dashboard() {
         </button>
       </div>
 
-        <div className="image-grid">
+        {projectContext?.project?<div className="image-grid">
           {imagesInfo.map((img) => (
             <div key={img.id} className="image-card">
               <img
@@ -102,7 +105,7 @@ export default function Dashboard() {
               </div>
             </div>
           ))}
-        </div>
+        </div>:null}
       </div>
     </>
   );

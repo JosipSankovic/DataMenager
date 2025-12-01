@@ -54,6 +54,28 @@ class LabelsService:
             )
         return labels
 
+    def get_latest_labels(
+        self,
+        project_id: str,
+        db: Session
+    ) -> list[LabelBase]:
+        labels = []
+        from app.models import Images
+
+        base_query = (
+            db.query(Label)
+            .join(Images, Label.image_id == Images.id)
+            .filter(Images.project_id == project_id)
+        )
+        labels = (
+            base_query
+            .distinct(Label.image_id)
+            .order_by(Label.image_id, desc(Label.created_at))
+            .all()
+        )
+       
+        return labels
+    
     def get_unversion_labels(
         self,
         project_id: str,
