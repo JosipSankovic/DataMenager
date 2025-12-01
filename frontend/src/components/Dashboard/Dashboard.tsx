@@ -6,14 +6,13 @@ export default function Dashboard() {
   const projectContext = useContext(ProjectContext);
   const [error, setError] = useState<string | null>(null);
   const [imagesInfo, setImagesInfo] = useState<Array<ImageBase>>([]);
-  useEffect(() => {
-    const fetchImages = async () => {
+  const fetchImages = async () => {
       try {
         if (!projectContext?.project) return;
         const imgs_response = await ImagesService.getAllImagesGet(
           projectContext.project.id,
           0,
-          1000
+          10000
         );
         setImagesInfo(imgs_response);
       } catch (error) {
@@ -21,6 +20,7 @@ export default function Dashboard() {
         setError("Cant fetch images");
       }
     };
+  useEffect(() => {
     fetchImages();
   }, [projectContext?.project]);
 
@@ -29,6 +29,18 @@ export default function Dashboard() {
       url
     )}`;
   };
+
+  const onScanDataset=async()=>{
+    try{
+      if(!projectContext?.project) return
+      const scanned_dataset = await ImagesService.scanDatasetImagesScanDatasetPost(projectContext.project.absolute_path,projectContext.project.id)
+      fetchImages()
+      console.log(scanned_dataset)
+    }catch(error){
+      console.error(error)
+      setError("Failed to scan dataset")
+    }
+  }
   return (
     <>
       <div className="main-title">
@@ -40,6 +52,7 @@ export default function Dashboard() {
       </div>
       <div className="main-content">
         <h2>Dataset annotations</h2>
+        <button onClick={onScanDataset} className="btn-scan-dataset"><span>Apply differences</span></button>
         <div className="image-grid">
           {imagesInfo.map((img) => (
             <div key={img.id} className="image-card">

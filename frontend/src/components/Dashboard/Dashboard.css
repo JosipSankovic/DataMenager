@@ -1,3 +1,6 @@
+.main-content{
+    padding: 10px 20px;
+}
 .main-title{
     padding: 20px;
     color:var(--text-white);
@@ -24,4 +27,12 @@
 .image-grid>.image-card>.overlay>p{
     overflow-wrap: anywhere;
     margin:10px 20px;
+}
+
+.btn-scan-dataset{
+    padding: 15px 10px;
+    border-radius: 10px;
+    border:0px;
+    background-color: var(--primary-color);
+    color: white;
 }

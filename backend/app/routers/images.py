@@ -36,3 +36,8 @@ def serve_file(file_path: str):
         print("File dont exists")
         raise HTTPException(status_code=404,detail="File dont exist")
     return FileResponse(file_path)
+
+@router.post("/scan_dataset",response_model=list[ImageBase])
+def scan_dataset(project_path:str,project_id:str,db:Session=Depends(get_db)):
+    images_service.scan_folder(project_path,project_id,db)
+    return []

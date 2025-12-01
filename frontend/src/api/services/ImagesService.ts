@@ -123,4 +123,27 @@ export class ImagesService {
             },
         });
     }
+    /**
+     * Scan Dataset
+     * @param projectPath
+     * @param projectId
+     * @returns ImageBase Successful Response
+     * @throws ApiError
+     */
+    public static scanDatasetImagesScanDatasetPost(
+        projectPath: string,
+        projectId: string,
+    ): CancelablePromise<Array<ImageBase>> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/images/scan_dataset',
+            query: {
+                'project_path': projectPath,
+                'project_id': projectId,
+            },
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
 }

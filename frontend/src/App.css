@@ -18,7 +18,7 @@
   flex-direction: row;
   min-height: 100vh;
 }
-p,span{
+p,span,h2,h1{
   color:var(--text-white);
   font-family:Inter,sans-serif;
 }

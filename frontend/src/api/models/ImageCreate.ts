@@ -10,5 +10,6 @@ export type ImageCreate = {
     channels: number;
     mime_type: string;
     is_annotated: boolean;
+    created_at: string;
 };
 
