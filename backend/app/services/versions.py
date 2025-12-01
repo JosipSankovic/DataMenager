@@ -25,6 +25,8 @@ class VersionService:
         return version
 
     def add_version(self,version:VersionCreate,db:Session)->VersionBase:
+        from app.services import LabelsService
+        label_service = LabelsService()
         db_version=Version(
             project_id = version.project_id,
             name = version.name
@@ -32,4 +34,5 @@ class VersionService:
         print(db_version)
         db.add(db_version)
         db.commit()
+        label_service.apply_version(version_id=db_version.id,project_id=version.project_id,db=db)
         return db_version
