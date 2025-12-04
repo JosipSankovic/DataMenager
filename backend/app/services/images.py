@@ -123,7 +123,7 @@ class ImagesService:
         return img_objects
 
     def get_folder_images(
-        self, folder_path: str, page: int, db: Session, page_size=150
+        self, folder_path: str, page: int, db: Session, page_size=100
     ) -> list[str]:
         if page <= 0:
             page = 1

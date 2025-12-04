@@ -1,6 +1,9 @@
 from pydantic import BaseModel
 from datetime import datetime
 from uuid import UUID
+from typing import List, Dict, Union, Any
+
+AugmentationValue = Union[List[float], float, int]
 
 class ImageBase(BaseModel):
     id:UUID
@@ -31,3 +34,9 @@ class ImageIds(BaseModel):
 
 class ImageDelete(BaseModel):
     id:UUID
+
+class ImageMetadata(BaseModel):
+    image_id: UUID
+    version_id: UUID
+    rel_path: str
+    augmentations: Dict[str, AugmentationValue] = {}

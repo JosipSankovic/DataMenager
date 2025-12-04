@@ -1,7 +1,4 @@
-from app.routers import ProjectsRouter, ImagesRouter,LabelsRouter,VersionsRouter
-from app.core import engine
-from app.models import projects as item_model # Import models so they are registered
-from app.models import images as images_model
+from app.routers import ProjectsRouter, ImagesRouter,LabelsRouter,VersionsRouter,DatasetsRouter
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 # Create the database tables
@@ -27,4 +24,6 @@ app.include_router(ProjectsRouter)
 app.include_router(ImagesRouter)
 app.include_router(LabelsRouter)
 app.include_router(VersionsRouter)
+app.include_router(DatasetsRouter)
+
 
