@@ -10,8 +10,10 @@ class DatasetData(BaseModel):
 
 class DatasetBase(BaseModel):
     id:UUID
+    version_id:UUID
     name:str
     description:str
+    size:int
 
 class DatasetAll(DatasetBase):
     project_id:UUID

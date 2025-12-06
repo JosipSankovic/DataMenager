@@ -6,6 +6,7 @@ import { BrowserRouter,Route,Routes } from 'react-router'
 import { ProjectContext } from './utils'
 import { useState } from 'react'
 import Dashboard from './components/Dashboard/Dashboard'
+import Datasets from './components/Datasets/Datasets'
 
 function App() {
   OpenAPI.BASE = "http://localhost:8000"
@@ -17,6 +18,7 @@ function App() {
         <Route path='/' element={<Layout />} >
         <Route path='/' index element={<Dashboard />} />
         <Route path ="/addimages" index element={<ShowFolderImages/>} />
+        <Route path='/datasets' element={<Datasets/>} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -14,6 +14,7 @@ class DatasetService:
         db_dataset = Dataset(
             project_id=dataset.project_id,
             version_id=dataset.version_id,
+            size = dataset.size,
             name = dataset.name,
             description = dataset.description,
         )
@@ -61,6 +62,7 @@ class DatasetService:
             version_id=dataset.version_id,
             description=dataset.description,
             name=dataset.name,
+            size = len(all_labels),
             data=d_data
         )
         db.add(db_dataset)

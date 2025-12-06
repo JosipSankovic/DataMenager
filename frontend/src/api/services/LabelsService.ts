@@ -11,21 +11,27 @@ export class LabelsService {
     /**
      * Get Labels
      * @param versionId
+     * @param projectId
+     * @param useNonVersioned
      * @param offset
      * @param limit
      * @returns LabelBase Successful Response
      * @throws ApiError
      */
     public static getLabelsLabelsGet(
-        versionId?: any,
+        versionId: string,
+        projectId: string,
+        useNonVersioned: boolean = true,
         offset?: number,
-        limit: number = 100,
+        limit: number = 10000,
     ): CancelablePromise<Array<LabelBase>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/labels/',
             query: {
                 'version_id': versionId,
+                'project_id': projectId,
+                'use_non_versioned': useNonVersioned,
                 'offset': offset,
                 'limit': limit,
             },
@@ -48,6 +54,29 @@ export class LabelsService {
             url: '/labels/',
             body: requestBody,
             mediaType: 'application/json',
+            errors: {
+                422: `Validation Error`,
+            },
+        });
+    }
+    /**
+     * Get Image Label
+     * @param imageId
+     * @param versionId
+     * @returns LabelBase Successful Response
+     * @throws ApiError
+     */
+    public static getImageLabelLabelsGetImageLabelGet(
+        imageId: string,
+        versionId?: string,
+    ): CancelablePromise<LabelBase> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/labels/get-image-label',
+            query: {
+                'image_id': imageId,
+                'version_id': versionId,
+            },
             errors: {
                 422: `Validation Error`,
             },

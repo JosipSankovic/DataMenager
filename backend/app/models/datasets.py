@@ -16,6 +16,7 @@ class Dataset(Base):
     version_id =  Column(UUID(as_uuid=True),ForeignKey("versions.id"),nullable=False)
     name = Column(String)
     description = Column(String,nullable=True)
+    size = Column(Integer)
     data = Column(JSONB,default={"train": [],"valid": [],"test": []})
     created_at = Column(DateTime(timezone=True),
                         server_default=func.now())
