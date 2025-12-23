@@ -1,0 +1,20 @@
+[build-system]
+requires = ["scikit-build-core", "pybind11", "cmake"]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "fast_augmentation"
+version = "0.2.0"
+description = "Brzi C++ modul za augmentaciju"
+requires-python = ">=3.7"
+
+# Ovo kaže scikit-build-u gdje je CMakeLists.txt (u rootu)
+[tool.scikit-build]
+cmake.version = ">=3.10"
+
+[tool.scikit-build.cmake.define]
+# Tells CMake exactly where to find OpenCVConfig.cmake
+OpenCV_DIR = "E:/Programs/vcpkg/installed/x64-windows/share/opencv4"
+
+# Optional: If you want to use the full vcpkg toolchain for nlohmann_json etc.
+CMAKE_TOOLCHAIN_FILE = "E:/Programs/vcpkg/scripts/buildsystems/vcpkg.cmake"
