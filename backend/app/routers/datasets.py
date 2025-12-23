@@ -11,7 +11,7 @@ dataset_service = DatasetService()
 def get_all(project_id:str,db:Session=Depends(get_db))->list[DatasetBase]:
     datasets = dataset_service.get_all_datasets(project_id,db)
     return datasets
-@router.post("/allver",response_model=DatasetAll)
+@router.post("/set_dataset",response_model=DatasetAll)
 def get_all(dataset:DatasetCreate,db:Session=Depends(get_db))->DatasetAll:
     labels=dataset_service.create_automatic_dataset(db,dataset)
     return labels
@@ -21,7 +21,7 @@ def get(dataset_id:str,project_id:str,db:Session=Depends(get_db))->DatasetBase:
     pass
 
 
-@router.post("/",response_model=DatasetBase)
-def create_dataset(dataset:DatasetCreate,db:Session=Depends(get_db))->DatasetBase:
-    db_dataset = dataset_service.create_dataset(dataset,db)
+@router.post("/create_files",response_model=DatasetBase)
+def create_dataset(dataset_id:str,db:Session=Depends(get_db))->DatasetBase:
+    db_dataset = dataset_service.create_dataset(dataset_id,db)
     return db_dataset

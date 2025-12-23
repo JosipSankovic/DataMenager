@@ -4,32 +4,104 @@ import shutil
 import uuid
 from datetime import datetime, timezone
 from sqlalchemy.orm import Session
+from sqlalchemy import func, desc
 from sqlalchemy import insert, desc, update,and_
-from app.schemas import LabelBase, LabelCreate, LabelUpdate, ImageBase
-from app.models import Label
+from app.schemas import LabelBase, LabelCreate, LabelUpdate, ImageBase,LabelAll
+from app.models import Label, Version
 import sys
 from app.utils import DataTracker
-
 
 class LabelsService:
 
     def get_image_label(
-        self,image_id: str, db: Session, version_id: str = None
-    ) -> LabelBase|None:
-        filter_query = None
-        if version_id:
-            filter_query =db.query(Label).filter(and_(Label.image_id==image_id,Label.version_id==version_id))
-        else:
-            filter_query =db.query(Label).filter(Label.image_id==image_id)
+        self, image_id: str, db: Session, version_id: str = None
+    ) -> LabelBase | None:
+        
+        query = db.query(Label).join(Version, Label.version_id == Version.id).filter(Label.image_id == image_id)
 
-        db_label = (
-            filter_query
-            .distinct(Label.image_id)
-            .order_by(Label.image_id, desc(Label.created_at))
+        if version_id:
+            target_version = db.query(Version).filter(Version.id == version_id).first()
+            if target_version:
+                query = query.filter(Version.created_at <= target_version.created_at)
+        result = (
+            query
+            .order_by(desc(Version.created_at))
             .first()
         )
-        return db_label
+        return result
+    # provjerit
+    def get_batch_image_label(
+            self,image_ids:list[str],version_id:str,db:Session
+    )->dict[str,LabelAll]:
+        """
+        Returns a dictionary mapping {image_id: LabelObject}
+        Efficiently fetches the 'closest prior' label for a batch of images.
+        """
+        
+        # 1. Determine the cutoff timestamp (1 Query)
+        cutoff_date = None
+        if version_id:
+            target_ver = db.query(Version.created_at).filter(Version.id == version_id).scalar()
+            if target_ver:
+                cutoff_date = target_ver
+        
+        # 2. Build the Main Query
+        # We want to filter by the list of images and the date cutoff
+        query = db.query(Label).join(Version, Label.version_id == Version.id)
+        
+        query = query.filter(Label.image_id.in_(image_ids))
+        
+        if cutoff_date:
+            query = query.filter(Version.created_at <= cutoff_date)
 
+        # --- STRATEGY SELECTION ---
+        
+        # OPTION A: If you are using PostgreSQL (Best/Fastest)
+        # Postgres has a special feature called DISTINCT ON that solves this perfectly.
+        # It keeps only the first row for each image_id, based on the order_by.
+        """
+        labels = (
+            query
+            .distinct(Label.image_id)
+            .order_by(Label.image_id, desc(Version.created_at))
+            .all()
+        )
+        """
+
+        # OPTION B: Generic SQL (SQLite, MySQL, Postgres compatible)
+        # If you aren't strictly on Postgres, we use a Subquery + Row Number.
+        # We assign a 'rank' to every label per image, ordered by date.
+        
+        subquery = (
+            db.query(
+                Label.id.label("label_id"),
+                Label.image_id,
+                func.row_number().over(
+                    partition_by=Label.image_id,
+                    order_by=desc(Version.created_at)
+                ).label("rank")
+            )
+            .join(Version, Label.version_id == Version.id)
+            .filter(Label.image_id.in_(image_ids))
+        )
+
+        if cutoff_date:
+            subquery = subquery.filter(Version.created_at <= cutoff_date)
+
+        subquery = subquery.subquery()
+
+        # Now we select the actual Label objects where rank == 1
+        # We join the original Label table against our ranked subquery
+        labels = (
+            db.query(Label)
+            .join(subquery, Label.id == subquery.c.label_id)
+            .filter(subquery.c.rank == 1)
+            .all()
+        )
+
+        # 3. Convert list to dictionary for O(1) lookups
+        return {str(label.image_id): label.data for label in labels}
+        
     def get_version_labels(
         self,
         version_id: str,
