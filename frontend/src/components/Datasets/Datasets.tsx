@@ -45,7 +45,9 @@ download
 
 function Dataset({dataset}:{dataset:DatasetBase}){
 
-
+    const createDataset=async()=>{
+      const created_dataset = await DatasetService.createDatasetDatasetCreateFilesPost(dataset.id)
+    }
     return(
          <div className="dataset-info">
             <span className="material-symbols-outlined" style={{fontSize:"50px"}}>perm_media</span>
@@ -54,6 +56,7 @@ function Dataset({dataset}:{dataset:DatasetBase}){
                 <p className="dataset-description">{dataset.description}</p>
             </div>
             <p className="dataset-images">{dataset.size} Images</p>
+            <button className="btn-scan-dataset" onClick={createDataset}><span>Create</span></button>
           </div>
     )
 }

@@ -35,12 +35,12 @@ export class DatasetService {
      * @returns DatasetAll Successful Response
      * @throws ApiError
      */
-    public static getAllDatasetAllverPost(
+    public static getAllDatasetSetDatasetPost(
         requestBody: DatasetCreate,
     ): CancelablePromise<DatasetAll> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/dataset/allver',
+            url: '/dataset/set_dataset',
             body: requestBody,
             mediaType: 'application/json',
             errors: {
@@ -73,18 +73,19 @@ export class DatasetService {
     }
     /**
      * Create Dataset
-     * @param requestBody
+     * @param datasetId
      * @returns DatasetBase Successful Response
      * @throws ApiError
      */
-    public static createDatasetDatasetPost(
-        requestBody: DatasetCreate,
+    public static createDatasetDatasetCreateFilesPost(
+        datasetId: string,
     ): CancelablePromise<DatasetBase> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/dataset/',
-            body: requestBody,
-            mediaType: 'application/json',
+            url: '/dataset/create_files',
+            query: {
+                'dataset_id': datasetId,
+            },
             errors: {
                 422: `Validation Error`,
             },
